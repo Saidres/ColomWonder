@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,9 @@ namespace HeneGames.DialogueSystem
             Collision,
             Input
         }
+
+        public static Action OnDialogueStart; // Action for dialogue start
+        public static Action OnDialogueEnd;   // Action for dialogue end
 
         [Header("References")]
         [SerializeField] private AudioSource audioSource;
@@ -41,21 +45,7 @@ namespace HeneGames.DialogueSystem
             //Start dialogue by input
             if (Input.GetKeyDown(DialogueUI.instance.actionInput) && dialogueTrigger != null && !dialogueIsOn)
             {
-                //Trigger event inside DialogueTrigger component
-                if (dialogueTrigger != null)
-                {
-                    dialogueTrigger.startDialogueEvent.Invoke();
-                }
-
-                startDialogueEvent.Invoke();
-
-                //If component found start dialogue
-                DialogueUI.instance.StartDialogue(this);
-
-                //Hide interaction UI
-                DialogueUI.instance.ShowInteractionUI(false);
-
-                dialogueIsOn = true;
+                StartDialogue();
             }
         }
 
@@ -169,6 +159,12 @@ namespace HeneGames.DialogueSystem
 
         public void StartDialogue()
         {
+            dialogueIsOn = true;
+
+            // Invoke the dialogue start action
+            OnDialogueStart?.Invoke();
+            SoundManager.instance.PlaySfx(SoundManager.instance.dialogueStart);
+
             //Start event
             if (dialogueTrigger != null)
             {
@@ -199,6 +195,7 @@ namespace HeneGames.DialogueSystem
 
             //Add one to sentence index
             currentSentence++;
+            SoundManager.instance.PlaySfx(SoundManager.instance.dialogueProgress);
 
             //Next sentence event
             if (dialogueTrigger != null)
@@ -235,6 +232,12 @@ namespace HeneGames.DialogueSystem
 
         public void StopDialogue()
         {
+            dialogueIsOn = false;
+
+            // Invoke the dialogue end action
+            OnDialogueEnd?.Invoke();
+            // SoundManager.instance.PlaySfx(SoundManager.instance.dialogueEnd);
+
             //Stop dialogue event
             if (dialogueTrigger != null)
             {
@@ -251,7 +254,6 @@ namespace HeneGames.DialogueSystem
             }
 
             //Remove trigger refence
-            dialogueIsOn = false;
             dialogueTrigger = null;
         }
 

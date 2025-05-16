@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9e3c076b4c05c4482b4a0047213d2a, type: 3}
+  m_Name: Level4Quiz
+  m_EditorClassIdentifier: 
+  quizSceneName: Level4
+  quizName: Level 4 Quiz
+  quizDescription: This quiz will test your knowledge about the Level 1 environment.
+  questions:
+  - questionText: This is a test question for Level 4. The correct answer is number
+      2.
+    questionImage: {fileID: 0}
+    answers:
+    - Answer 1.
+    - Answer 2.
+    - Answer 3.
+    correctAnswerIndex: 1
+  - questionText: This is a test question for Level 4. The correct answer is number
+      1.
+    questionImage: {fileID: 0}
+    answers:
+    - Answer 1.
+    - Answer 2.
+    - Answer 3.
+    - Answer 4.
+    correctAnswerIndex: 0
+  - questionText: This is a test question for Level 4. The correct answer is number
+      3.
+    questionImage: {fileID: 0}
+    answers:
+    - Answer 1.
+    - Answer 2.
+    - Answer 3.
+    correctAnswerIndex: 2

@@ -6,15 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MenuInicial.unity
+    path: Assets/Scenes/MainMenu.unity
     guid: 410ade4fc5891f54193d320dc39853dc
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/Level1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Volcan galeras.unity
-    guid: bdf3544e6c794e640afc7dd2a0649ec4
+    path: Assets/Scenes/Level2.unity
+    guid: ad7c5042ca343764fb75a462b701a865
   - enabled: 1
-    path: Assets/Scenes/Nivel2.unity
-    guid: c9e660d7f0d0c134bb4adb4ed670dd84
+    path: Assets/Scenes/Level3.unity
+    guid: 148770d17aafb71498a31a0427eca2cc
+  - enabled: 1
+    path: Assets/Scenes/Level4.unity
+    guid: db00d222ce926f141aeb8719e9f1dc03
+  - enabled: 1
+    path: Assets/Scenes/QuizScene.unity
+    guid: 2d140c94931597a4caeef44b739a6e6a
   m_configObjects: {}

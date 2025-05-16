@@ -4,12 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Espada
+  - Sword
+  - DeathZone
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - suelo
+  - Ground
   - Water
   - UI
   - 
