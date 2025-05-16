@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb1be74beaa3e64185c09d33b67880f, type: 3}
+  m_Name: Level3
+  m_EditorClassIdentifier: 
+  levelSceneName: Level3
+  levelName: Misterio en Las Lajas
+  levelDescription: Test level description. You can change this.
+  possibleEnemies:
+  - {fileID: 21300000, guid: bebef0e3af37fb148803d2da4602c2c0, type: 3}
+  - {fileID: 21300000, guid: bebef0e3af37fb148803d2da4602c2c0, type: 3}
+  - {fileID: 21300000, guid: bebef0e3af37fb148803d2da4602c2c0, type: 3}
+  localFlora: Helechos
+  localFauna: Tucanes
+  typicalFood: "Tortillas de ma\xEDz"
+  character: {fileID: 21300000, guid: be3b3f3ba95c2954b89b0f2b1d866cf1, type: 3}

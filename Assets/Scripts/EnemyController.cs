@@ -1,42 +1,67 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HeneGames.DialogueSystem;
 
 public class EnemyController : MonoBehaviour
 {
-    public Transform player; 
-    public float detectionRadius = 5.0f; 
+    public Transform player;
+    public float detectionRadius = 5.0f;
     public float speed = 2.0f;
-    public float fuerzaRebote = 6f;
-    public int vida = 3;
+    public float bounceForce = 6f;
+    public int health = 3;
 
     private Rigidbody2D rb;
     private Vector2 movement;
-    private bool enMovimiento;
-    private bool muerto;
-    private bool recibiendoDanio;
-    private bool playerVivo;
+    private bool isMoving;
+    private bool isDead;
+    private bool takingDamage;
+    private bool playerAlive;
+    private bool isMovementDisabled = false; // Flag to disable movement
 
     private Animator animator;
+
     void Start()
     {
-        playerVivo = true;
+        playerAlive = true;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        // Subscribe to dialogue events
+        DialogueManager.OnDialogueStart += DisableMovement;
+        DialogueManager.OnDialogueEnd += EnableMovement;
     }
 
+    private void OnDestroy()
+    {
+        // Unsubscribe from dialogue events
+        DialogueManager.OnDialogueStart -= DisableMovement;
+        DialogueManager.OnDialogueEnd -= EnableMovement;
+    }
 
     void Update()
     {
-        if (playerVivo && !muerto)
+        if (playerAlive && !isDead && !isMovementDisabled)
         {
-            Movimiento();
+            Move();
         }
 
-        animator.SetBool("enMovimiento", enMovimiento);
-        animator.SetBool("muerto", muerto);
+        animator.SetBool("isMoving", isMoving);
+        animator.SetBool("isDead", isDead);
     }
-    private void Movimiento()
+
+    private void DisableMovement()
+    {
+        isMovementDisabled = true;
+    }
+
+    private void EnableMovement()
+    {
+        isMovementDisabled = false;
+    }
+
+    private void Move()
     {
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
@@ -55,70 +80,76 @@ public class EnemyController : MonoBehaviour
 
             movement = new Vector2(direction.x, 0);
 
-            enMovimiento = true;
+            isMoving = true;
         }
         else
         {
             movement = Vector2.zero;
-            enMovimiento = false;
+            isMoving = false;
         }
-        if (!recibiendoDanio)
+        if (!takingDamage)
             rb.MovePosition(rb.position + movement * speed * Time.deltaTime);
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Vector2 direccionDanio = new Vector2(transform.position.x, 0);
+            Vector2 damageDirection = new Vector2(transform.position.x, 0);
             PlayerController playerScript = collision.gameObject.GetComponent<PlayerController>();
 
-            playerScript.RecibeDanio(direccionDanio, 1);
-            playerVivo = !playerScript.muerto;
-            if (!playerVivo)
+            playerScript.TakeDamage(damageDirection, 1);
+            playerAlive = !playerScript.isDead;
+            if (!playerAlive)
             {
-                enMovimiento = false;
+                isMoving = false;
             }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Espada"))
+        if (collision.CompareTag("Sword"))
         {
-            Vector2 direccionDanio = new Vector2(collision.gameObject.transform.position.x, 0);
+            Vector2 damageDirection = new Vector2(collision.gameObject.transform.position.x, 0);
 
-            RecibeDanio(direccionDanio, 1);
+            TakeDamage(damageDirection, 1);
         }
     }
-    public void RecibeDanio(Vector2 direccion, int cantDanio)
+
+    public void TakeDamage(Vector2 direction, int damageAmount)
     {
-        if (!recibiendoDanio)
+        if (!takingDamage)
         {
-            vida -= cantDanio;
-            recibiendoDanio = true;
-            if (vida <= 0)
+            health -= damageAmount;
+            takingDamage = true;
+            if (health <= 0)
             {
-                muerto = true;
-                enMovimiento = false;
+                isDead = true;
+                isMoving = false;
+                SoundManager.instance.PlaySfx(SoundManager.instance.zombieDie);
             }
             else
             {
-                Vector2 rebote = new Vector2(transform.position.x - direccion.x, 0.2f).normalized;
-                rb.AddForce(rebote * fuerzaRebote, ForceMode2D.Impulse);
-                StartCoroutine(DesactivaDanio());
+                Vector2 bounce = new Vector2(transform.position.x - direction.x, 0.2f).normalized;
+                rb.AddForce(bounce * bounceForce, ForceMode2D.Impulse);
+                StartCoroutine(DisableDamage());
             }
         }
     }
-    IEnumerator DesactivaDanio()
+
+    IEnumerator DisableDamage()
     {
         yield return new WaitForSeconds(0.4f);
-        recibiendoDanio = false;
+        takingDamage = false;
         rb.velocity = Vector2.zero;
     }
-    public void EliminarCuerpo()
+
+    public void DestroyBody()
     {
         Destroy(gameObject);
     }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

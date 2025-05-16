@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 namespace HeneGames.DialogueSystem
 {
@@ -24,7 +25,7 @@ namespace HeneGames.DialogueSystem
                 Destroy(gameObject);
             }
 
-            //Hide dialogue and interaction UI at awake
+            // Hide dialogue and interaction UI at awake
             dialogueWindow.SetActive(false);
             interactionUI.SetActive(false);
         }
@@ -52,11 +53,15 @@ namespace HeneGames.DialogueSystem
         [Header("Next sentence input")]
         public KeyCode actionInput = KeyCode.X;
 
-
+        [Header("DOTween Animation Settings")]
+        [SerializeField] private float shakeStrength = 10f; // Strength of the shake
+        [SerializeField] private float shakeDuration = 0.2f; // Duration of the shake
+        [SerializeField] private int shakeVibrato = 10; // Vibrato for the shake
+        [SerializeField] private float fadeDuration = 0.3f; // Duration for fade-in/out effects
 
         private void Update()
         {
-            //Delay timer
+            // Delay timer
             if (startDialogueDelayTimer > 0f)
             {
                 startDialogueDelayTimer -= Time.deltaTime;
@@ -67,7 +72,7 @@ namespace HeneGames.DialogueSystem
 
         public virtual void InputUpdate()
         {
-            //Next dialogue input
+            // Next dialogue input
             if (Input.GetKeyDown(actionInput))
             {
                 NextSentenceSoft();
@@ -100,14 +105,14 @@ namespace HeneGames.DialogueSystem
         /// </summary>
         public void NextSentenceHard()
         {
-            //Continue only if we have dialogue
+            // Continue only if we have dialogue
             if (currentDialogueManager == null)
                 return;
 
-            //Tell the current dialogue manager to display the next sentence. This function also gives information if we are at the last sentence
+            // Tell the current dialogue manager to display the next sentence
             currentDialogueManager.NextSentence(out bool lastSentence);
 
-            //If last sentence remove current dialogue manager
+            // If last sentence, remove current dialogue manager
             if (lastSentence)
             {
                 currentDialogueManager = null;
@@ -116,25 +121,31 @@ namespace HeneGames.DialogueSystem
 
         public void StartDialogue(DialogueManager _dialogueManager)
         {
-            //Delay timer
+            // Delay timer
             startDialogueDelayTimer = 0.1f;
 
-            //Store dialogue manager
+            // Store dialogue manager
             currentDialogueManager = _dialogueManager;
 
-            //Start displaying dialogue
+            // Start displaying dialogue
             currentDialogueManager.StartDialogue();
+
+            // Fade in the dialogue window
+            dialogueWindow.SetActive(true);
+            // dialogueWindow.GetComponent<CanvasGroup>().alpha = 0f;
+            // dialogueWindow.GetComponent<CanvasGroup>().DOFade(1f, fadeDuration);
         }
 
         public void ShowSentence(DialogueCharacter _dialogueCharacter, string _message)
         {
             StopAllCoroutines();
 
-            dialogueWindow.SetActive(true);
-
             portrait.sprite = _dialogueCharacter.characterPhoto;
             nameText.text = _dialogueCharacter.characterName;
             currentMessage = _message;
+
+            // Shake the portrait image
+            portrait.rectTransform.DOShakePosition(shakeDuration, shakeStrength, shakeVibrato, 90, false, true);
 
             if (animateText)
             {
@@ -148,7 +159,11 @@ namespace HeneGames.DialogueSystem
 
         public void ClearText()
         {
+            // Fade out the dialogue window
+            // dialogueWindow.GetComponent<CanvasGroup>().DOFade(0f, fadeDuration).OnComplete(() =>
+            // {
             dialogueWindow.SetActive(false);
+            // });
         }
 
         public void ShowInteractionUI(bool _value)
@@ -158,12 +173,7 @@ namespace HeneGames.DialogueSystem
 
         public bool IsProcessingDialogue()
         {
-            if (currentDialogueManager != null)
-            {
-                return true;
-            }
-
-            return false;
+            return currentDialogueManager != null;
         }
 
         public bool IsTyping()

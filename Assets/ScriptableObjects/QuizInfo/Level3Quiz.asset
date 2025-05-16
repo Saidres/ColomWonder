@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9e3c076b4c05c4482b4a0047213d2a, type: 3}
+  m_Name: Level3Quiz
+  m_EditorClassIdentifier: 
+  quizSceneName: Level3
+  quizName: Level 3 Quiz
+  quizDescription: This quiz will test your knowledge about the Level 1 environment.
+  questions:
+  - questionText: "\xBFD\xF3nde comienza la historia del juego?"
+    questionImage: {fileID: 0}
+    answers:
+    - En un castillo abandonado
+    - En una ciudad futurista
+    - En Las Lajas
+    - "En la cima de una monta\xF1a"
+    correctAnswerIndex: 2
+  - questionText: "\xBFQu\xE9 criatura misteriosa se menciona en este nivel?"
+    questionImage: {fileID: 0}
+    answers:
+    - "Un drag\xF3n"
+    - Un duende
+    - Un fantasma
+    - Un ogro
+    correctAnswerIndex: 1
+  - questionText: "\xBFQu\xE9 consejo da el campesino sobre el duende?"
+    questionImage: {fileID: 0}
+    answers:
+    - Que lo sigas para encontrar oro
+    - Que lo invites a comer
+    - "Que corras si lo oyes re\xEDr"
+    - Que cantes para espantarlo
+    correctAnswerIndex: 2
